@@ -1,10 +1,8 @@
 import axios from 'axios';
 
-const URL = 'https://travel-advisor.p.rapidapi.com/restaurants/list-by-latlng';
-
-export const getPlacesData = async (sw, ne) => {
+export const getPlacesData = async (type, sw, ne) => {
     try {
-        const { data: { data } } = await axios.get(URL, {
+        const { data: { data } } = await axios.get(`https://travel-advisor.p.rapidapi.com/${type}/list-by-latlng`, {
             method: 'GET',
             url: URL,
             params: {
@@ -13,9 +11,25 @@ export const getPlacesData = async (sw, ne) => {
             },
             headers: {
               'x-rapidapi-host': 'travel-advisor.p.rapidapi.com',
-              'x-rapidapi-key': 'b347313d6cmsh5890f0d0f0a8749p1e3aa5jsn451818363ab5'
+              'x-rapidapi-key': process.env.REACT_APP_RAPIDAPI_KEY
             }
         });  
+
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const getWeatherData = async (lat, lng) => {
+    try {
+        const { data } = await axios.get('https://community-open-weather-map.p.rapidapi.com/weather', {
+            params: { lat: lat, lon: lng },
+            headers: {
+                'x-rapidapi-host': 'community-open-weather-map.p.rapidapi.com',
+                'x-rapidapi-key': process.env.REACT_APP_RAPIDAPI_KEY
+            }
+        });
 
         return data;
     } catch (error) {
